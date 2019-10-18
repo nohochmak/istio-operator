@@ -1,3 +1,4 @@
+# This is cleaned-up version of the instructions
 # Maistra Istio Operator
 
 This project is an operator that can be used to manage the installation of an [Istio](https://istio.io) control plane.
@@ -13,9 +14,16 @@ If available, the Elasticsearch operator (version 4.1) should be installed from 
 
 Alternatively, to install the Elasticsearch operator manually, execute the following commands:
 
+...
+# login to oc
+oc login -u system:admin
+...
+
+
 ```
 # See note below for explanation of why kubectl is used instead of oc
-kubectl create ns openshift-logging # create the project for the elasticsearch operator
+kubectl create ns openshift-logging 
+# create the project for the elasticsearch operator
 oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-4.1/manifests/01-service-account.yaml -n openshift-logging
 oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-4.1/manifests/02-role.yaml
 oc create -f https://raw.githubusercontent.com/openshift/elasticsearch-operator/release-4.1/manifests/03-role-bindings.yaml
@@ -34,11 +42,13 @@ Error from server (Forbidden): project.project.openshift.io "openshift-logging" 
 To install the Jaeger operator, execute the following commands:
 
 ```
-oc new-project observability # create the project for the jaeger operator
-oc create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/crds/jaegertracing_v1_jaeger_crd.yaml
-oc create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/service_account.yaml
-oc create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/role.yaml
-oc create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/role_binding.yaml
+# create the project for the jaeger operator - note that this project is now the default and unlike kubectl is not needed
+# in every command.
+oc new-project observability 
+oc create  -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/crds/jaegertracing_v1_jaeger_crd.yaml
+oc create  -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/service_account.yaml
+oc create  -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/role.yaml
+oc create  -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/role_binding.yaml
 oc create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/v1.13.1/deploy/operator.yaml
 ```
 
@@ -49,6 +59,13 @@ To install the Kiali operator, execute the following command:
 ```
 bash <(curl -L https://git.io/getLatestKialiOperator) --operator-image-version v1.0.0 --operator-watch-namespace '**' --accessible-namespaces '**' --operator-install-kiali false
 ```
+If you receive and error about "missing envsubst" that the bash command requires. and on OS X (Mac):
+# Install gettext package if not installed:
+brew install gettext
+# Set the path to the installed version (see "brew info gettext" command for more info)
+export PATH="/usr/local/opt/gettext/bin:$PATH"
+rerun the Kiali install command above.
+
 
 For more details on installing the Kiali operator, see the [Kiali documentaton](https://www.kiali.io/documentation/getting-started).
 
