@@ -1,4 +1,4 @@
-# This is cleaned-up version of the instructions
+# This is a cleaned-up version of the instructions
 # Maistra Istio Operator
 
 This project is an operator that can be used to manage the installation of an [Istio](https://istio.io) control plane.
